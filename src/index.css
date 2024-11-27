@@ -1,0 +1,134 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* border: 1px dashed red; */
+  box-sizing: border-box;
+}
+
+body{
+  background-color: #c5dce1;
+}
+
+ul{
+  list-style: none;
+}
+
+.container{
+  width: 600px;
+  margin: 0 auto;
+  margin-top: 120px;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 30px;
+  padding-bottom: 0;
+  box-shadow: 3px 2px 5px;
+}
+
+h2{
+  color: #f3bf73;
+  font-size: 4em;
+  font-weight: bold;
+}
+
+input{
+  display: block;
+  background-color: #fff9f9;
+  border: none;
+  margin-left: 10px;
+  font-size: 1.4em;
+  padding: 15px 10px;
+  font-family: 'Handlee';
+}
+
+input:focus{
+  outline:none;
+}
+
+.list-container{
+  background-color: #fff9f9;
+  border: 2px solid #071952;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.list-container li{
+  padding: 10px;
+  font-size: 1.6em;
+}
+
+.list-container li{
+  border-bottom: 1px solid;
+  border-top: 1px solid;
+  padding-left:20px;
+}
+
+.list-container ul li:first-child{
+  border-top: 1px solid;
+  border-bottom: none;
+}
+.list-container ul li:last-child{
+  border-bottom: 1px solid;
+  border-top: none;
+}
+
+li{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close{
+  padding-right: 10px;
+  color: crimson;
+}
+
+ul li{
+  color: #4A628A;
+  font-family:'Handlee';
+}
+
+.header {
+  display: flex; 
+  align-items: center; 
+  position: relative; 
+}
+
+.header h2 {
+  font-family: 'Handlee';
+  text-align: center; 
+  flex-grow: 1; /* Ocupa el espacio central disponible */
+  color: #08237c;
+}
+
+.icono {
+  font-size: 4em; 
+  color: #069229;
+  position: absolute;
+  right: 50px; 
+}
+
+.list-container p{
+  font-family: 'Handlee';
+  padding:6px 20px;
+}
+
+.footer{
+  text-align: center;
+}
+
+button{
+  margin: 15px 0; 
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  background-color: rgb(255, 81, 87);
+  font-size: 1.2em;
+  font-family:'Handlee';
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+button:hover{
+  color: white;
+  outline: 2px solid black;
+}
