@@ -1,63 +1,127 @@
-import { useEffect, useState } from 'react'
+import {useState,useEffect} from 'react'
+import Search from './Search';
+
 
 function App() {
 
+  const base_url = 'https://playground.4geeks.com/todo';
+  const name = 'javier';
   const [list,setList] = useState([]);
+    
 
-  
-  const añadirItems = (contenido) => {
-      if(contenido.target.value === ''){
-        alert('Introduce un nombre...');
-        return
+
+  //OBTENER LA API
+  const obtenerAPI = () => {
+    fetch(`${base_url}/users/${name}`)
+      .then((response) => {
+        if (!response.ok) throw new Error('Error al obtener la lista de to-dos');
+        return response.json();
+      })
+      .then((data) => setList(data.todos)) // Actualiza el estado con la lista completa
+      .catch((error) => console.error('Error:', error));
+  };
+
+    //FUNCION AÑADIR
+    const addItem = (input) => {
+
+      const body = {
+        'label': input,
+        'done':false,
       }
-      const listCopy = [...list];
-      listCopy.unshift(contenido.target.value);
-      setList(listCopy);
-      contenido.target.value = '';
-  }
 
-  const eliminarItems = (index) => {
-    const listCopy = [...list]
-    listCopy.splice(index,1);
-    setList(listCopy)
-  }
+      fetch(`${base_url}/todos/${name}`,{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'accept': 'application/json'
+        },
+        body: JSON.stringify(body)
 
-  const removeAll = () => {
-    const listCopy = [];
-    setList(listCopy);
-  }
+      })
+      .then(response => {
+        if(!response.ok){
+          throw new Error('Error el cargar el item')
+        }
+        // return response.json();
+      })
+      .then(()=> obtenerAPI())
+      .catch(error  => console.log(error))
+    };
 
-  useEffect(()=>{
-    console.log(list)
-  },[list])
+
+    //FUNCION BORRAR
+    const deleteItem = (id) => {
+      fetch(`${base_url}/todos/${id}`,{
+        method:'DELETE',
+        headers:{
+          'Content-Type':'application/json',
+          'accept': 'application/json'
+        },
+
+      })
+      .then(response => {
+        if(!response.ok){
+          throw new Error('Error el cargar el item')
+        }
+        // return response.json();
+      })
+      .then(()=> obtenerAPI())
+      .catch(error  => console.log(error))
+    };
+
+
+    //DELETE ALL
+   
+    const deleteAll = () => {
+      Promise.all(
+        list.map((item) => {
+          return fetch(`${base_url}/todos/${item.id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'accept': 'application/json',
+            },
+          });
+        })
+      )
+        .then(() => {
+          console.log('Todos los elementos fueron eliminados.');
+          setList([]); // Limpia la lista localmente
+        })
+        .catch((error) => console.error('Error al eliminar todos los elementos:', error));
+    }
+    
+    
+    
+    useEffect(() => {
+      obtenerAPI();
+    },[])
 
 
   return (
     <div className='container'>
-
-      <div className='header'>
-        <h2>ToDo List</h2>
-        <i className="icono fa-solid fa-check"></i>
-        
-      </div>
-      
-      <div onKeyUp={(event) => {
-        if(event.code === 'Enter'){
-          return añadirItems(event)
-        }
-        }} 
-        className='list-container'>
-        <input type="text" placeholder='Tarea a realizar...'/>
+        <div className='content-container'>
+            {/* Header */}
+            <div className='header'>
+              <h1>Todo-List API</h1>
+            </div>
+      {/* Search */}
+      <Search addToDos = {addItem}/>
+      {/* List */}
+      <div className='list-container'>
         <ul>
-          {list.map((item,index)=>{
-            return <li key={index}>{item}<i onClick={()=> eliminarItems(index)} className=" close fa-solid fa-xmark"></i></li>
-          })}
+          {list.map((item,index)=> <li key={index}>{item.label}<i onClick={() => deleteItem(item.id)} className="xmark fa-solid fa-xmark"></i></li>)}
         </ul>
-        <p>{list.length} Items left</p>
       </div>
-      <div className='footer'>
-        <button onClick={() => removeAll()}>Eliminar lista</button>
+      <div className='delete-container'>
+        <button onClick={deleteAll} >Delete all items</button>
       </div>
+      {/* Footer */}
+        </div>
+        <div className='footer-container'>
+          <p>Made By Javier Orgaz</p>
+        </div>
+      
     </div>
   )
       
